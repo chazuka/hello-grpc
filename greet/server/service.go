@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"log"
-	"time"
 
 	"github.com/chazuka/hello-grpc/greet/pkg"
 )
@@ -12,9 +13,9 @@ import (
 type GreetService struct{}
 
 func (s *GreetService) Greet(ctx context.Context, r *pkg.GreetRequest) (*pkg.GreetResponse, error) {
+	log.Printf("serving Greet request ...")
 	fn := r.GetPerson().GetFirstName()
 	ln := r.GetPerson().GetLastName()
-	log.Printf("greeting a person with payload %s and %s", fn, ln)
 	rw := &pkg.GreetResponse{
 		Greeting: fmt.Sprintf("Hello %s %s", fn, ln),
 	}
@@ -22,22 +23,41 @@ func (s *GreetService) Greet(ctx context.Context, r *pkg.GreetRequest) (*pkg.Gre
 	return rw, nil
 }
 
-func (s *GreetService) GreetStream(r *pkg.GreetStreamRequest, ss pkg.GreetService_GreetStreamServer) error {
+func (s *GreetService) GreetServerStream(r *pkg.GreetServerStreamRequest, ss pkg.GreetService_GreetServerStreamServer) error {
 	fn := r.GetPerson().GetFirstName()
 	ln := r.GetPerson().GetLastName()
-	log.Printf("stream greeting a person with payload %s and %s", fn, ln)
+	num := int(r.GetNumber())
+	if num < 1 {
+		num = 1
+	}
+	log.Printf("stream greeting %s %s %d times", fn, ln, num)
 
-	for i := 0; i < 10; i++ {
-		rw := &pkg.GreetStreamResponse{
+	for i := 1; i <= num; i++ {
+		rw := &pkg.GreetServerStreamResponse{
 			Greeting: fmt.Sprintf("Hello %s %s #%d", fn, ln, i),
 		}
 		log.Printf("sending response %d", i)
 		if err := ss.Send(rw); err != nil {
 			return err
 		}
-		// emulate delay process
-		time.Sleep(1 * time.Second)
 	}
 
 	return nil
+}
+
+func (s *GreetService) GreetClientStream(ss pkg.GreetService_GreetClientStreamServer) error {
+	log.Printf("serving GreetClientStream ...")
+	greetings := make([]string, 0)
+	for {
+		log.Printf("receiving message from client")
+		r, err := ss.Recv()
+		if errors.Is(err, io.EOF) {
+			log.Printf("all message received, sending response")
+			return ss.SendAndClose(&pkg.GreetClientStreamResponse{Greeting: greetings})
+		}
+		if err != nil {
+			return err
+		}
+		greetings = append(greetings, fmt.Sprintf("Hello %s %s", r.GetPerson().GetFirstName(), r.GetPerson().GetLastName()))
+	}
 }

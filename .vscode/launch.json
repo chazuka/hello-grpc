@@ -12,6 +12,15 @@
             "program": "${workspaceFolder}/calculator/server",
             "env": {},
             "args": []
+        },
+        {
+            "name": "Greet Server Debug",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/greet/server",
+            "env": {},
+            "args": []
         }
     ]
 }

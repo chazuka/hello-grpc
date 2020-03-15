@@ -10,21 +10,31 @@ message Person {
     string last_name = 2;
 }
 message GreetRequest {
-    Person Person = 1;
+    Person person = 1;
 }
 message GreetResponse {
     string greeting = 1;
 }
 
-message GreetStreamRequest {
-    Person Person = 1;
+message GreetServerStreamRequest {
+    Person person = 1;
+    int32 number = 2;
 }
-message GreetStreamResponse {
+message GreetServerStreamResponse {
     string greeting = 1;
+}
+
+message GreetClientStreamRequest {
+    Person person = 1;
+}
+
+message GreetClientStreamResponse {
+    repeated string greeting = 1;   
 }
 
 
 service GreetService {
-    rpc Greet(GreetRequest) returns (GreetResponse) {};
-    rpc GreetStream(GreetStreamRequest) returns (stream GreetStreamResponse) {};
+    rpc Greet(GreetRequest) returns (GreetResponse);
+    rpc GreetServerStream(GreetServerStreamRequest) returns (stream GreetServerStreamResponse);
+    rpc GreetClientStream(stream GreetClientStreamRequest) returns (GreetClientStreamResponse);
 }

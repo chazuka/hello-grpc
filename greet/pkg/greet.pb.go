@@ -72,7 +72,7 @@ func (m *Person) GetLastName() string {
 }
 
 type GreetRequest struct {
-	Person               *Person  `protobuf:"bytes,1,opt,name=Person,proto3" json:"Person,omitempty"`
+	Person               *Person  `protobuf:"bytes,1,opt,name=person,proto3" json:"person,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -149,90 +149,178 @@ func (m *GreetResponse) GetGreeting() string {
 	return ""
 }
 
-type GreetStreamRequest struct {
-	Person               *Person  `protobuf:"bytes,1,opt,name=Person,proto3" json:"Person,omitempty"`
+type GreetServerStreamRequest struct {
+	Person               *Person  `protobuf:"bytes,1,opt,name=person,proto3" json:"person,omitempty"`
+	Number               int32    `protobuf:"varint,2,opt,name=number,proto3" json:"number,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GreetStreamRequest) Reset()         { *m = GreetStreamRequest{} }
-func (m *GreetStreamRequest) String() string { return proto.CompactTextString(m) }
-func (*GreetStreamRequest) ProtoMessage()    {}
-func (*GreetStreamRequest) Descriptor() ([]byte, []int) {
+func (m *GreetServerStreamRequest) Reset()         { *m = GreetServerStreamRequest{} }
+func (m *GreetServerStreamRequest) String() string { return proto.CompactTextString(m) }
+func (*GreetServerStreamRequest) ProtoMessage()    {}
+func (*GreetServerStreamRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_285dce36ca2d93c1, []int{3}
 }
 
-func (m *GreetStreamRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GreetStreamRequest.Unmarshal(m, b)
+func (m *GreetServerStreamRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GreetServerStreamRequest.Unmarshal(m, b)
 }
-func (m *GreetStreamRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GreetStreamRequest.Marshal(b, m, deterministic)
+func (m *GreetServerStreamRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GreetServerStreamRequest.Marshal(b, m, deterministic)
 }
-func (m *GreetStreamRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GreetStreamRequest.Merge(m, src)
+func (m *GreetServerStreamRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GreetServerStreamRequest.Merge(m, src)
 }
-func (m *GreetStreamRequest) XXX_Size() int {
-	return xxx_messageInfo_GreetStreamRequest.Size(m)
+func (m *GreetServerStreamRequest) XXX_Size() int {
+	return xxx_messageInfo_GreetServerStreamRequest.Size(m)
 }
-func (m *GreetStreamRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GreetStreamRequest.DiscardUnknown(m)
+func (m *GreetServerStreamRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GreetServerStreamRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GreetStreamRequest proto.InternalMessageInfo
+var xxx_messageInfo_GreetServerStreamRequest proto.InternalMessageInfo
 
-func (m *GreetStreamRequest) GetPerson() *Person {
+func (m *GreetServerStreamRequest) GetPerson() *Person {
 	if m != nil {
 		return m.Person
 	}
 	return nil
 }
 
-type GreetStreamResponse struct {
+func (m *GreetServerStreamRequest) GetNumber() int32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+type GreetServerStreamResponse struct {
 	Greeting             string   `protobuf:"bytes,1,opt,name=greeting,proto3" json:"greeting,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GreetStreamResponse) Reset()         { *m = GreetStreamResponse{} }
-func (m *GreetStreamResponse) String() string { return proto.CompactTextString(m) }
-func (*GreetStreamResponse) ProtoMessage()    {}
-func (*GreetStreamResponse) Descriptor() ([]byte, []int) {
+func (m *GreetServerStreamResponse) Reset()         { *m = GreetServerStreamResponse{} }
+func (m *GreetServerStreamResponse) String() string { return proto.CompactTextString(m) }
+func (*GreetServerStreamResponse) ProtoMessage()    {}
+func (*GreetServerStreamResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_285dce36ca2d93c1, []int{4}
 }
 
-func (m *GreetStreamResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GreetStreamResponse.Unmarshal(m, b)
+func (m *GreetServerStreamResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GreetServerStreamResponse.Unmarshal(m, b)
 }
-func (m *GreetStreamResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GreetStreamResponse.Marshal(b, m, deterministic)
+func (m *GreetServerStreamResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GreetServerStreamResponse.Marshal(b, m, deterministic)
 }
-func (m *GreetStreamResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GreetStreamResponse.Merge(m, src)
+func (m *GreetServerStreamResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GreetServerStreamResponse.Merge(m, src)
 }
-func (m *GreetStreamResponse) XXX_Size() int {
-	return xxx_messageInfo_GreetStreamResponse.Size(m)
+func (m *GreetServerStreamResponse) XXX_Size() int {
+	return xxx_messageInfo_GreetServerStreamResponse.Size(m)
 }
-func (m *GreetStreamResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GreetStreamResponse.DiscardUnknown(m)
+func (m *GreetServerStreamResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GreetServerStreamResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GreetStreamResponse proto.InternalMessageInfo
+var xxx_messageInfo_GreetServerStreamResponse proto.InternalMessageInfo
 
-func (m *GreetStreamResponse) GetGreeting() string {
+func (m *GreetServerStreamResponse) GetGreeting() string {
 	if m != nil {
 		return m.Greeting
 	}
 	return ""
 }
 
+type GreetClientStreamRequest struct {
+	Person               *Person  `protobuf:"bytes,1,opt,name=person,proto3" json:"person,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GreetClientStreamRequest) Reset()         { *m = GreetClientStreamRequest{} }
+func (m *GreetClientStreamRequest) String() string { return proto.CompactTextString(m) }
+func (*GreetClientStreamRequest) ProtoMessage()    {}
+func (*GreetClientStreamRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_285dce36ca2d93c1, []int{5}
+}
+
+func (m *GreetClientStreamRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GreetClientStreamRequest.Unmarshal(m, b)
+}
+func (m *GreetClientStreamRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GreetClientStreamRequest.Marshal(b, m, deterministic)
+}
+func (m *GreetClientStreamRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GreetClientStreamRequest.Merge(m, src)
+}
+func (m *GreetClientStreamRequest) XXX_Size() int {
+	return xxx_messageInfo_GreetClientStreamRequest.Size(m)
+}
+func (m *GreetClientStreamRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GreetClientStreamRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GreetClientStreamRequest proto.InternalMessageInfo
+
+func (m *GreetClientStreamRequest) GetPerson() *Person {
+	if m != nil {
+		return m.Person
+	}
+	return nil
+}
+
+type GreetClientStreamResponse struct {
+	Greeting             []string `protobuf:"bytes,1,rep,name=greeting,proto3" json:"greeting,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GreetClientStreamResponse) Reset()         { *m = GreetClientStreamResponse{} }
+func (m *GreetClientStreamResponse) String() string { return proto.CompactTextString(m) }
+func (*GreetClientStreamResponse) ProtoMessage()    {}
+func (*GreetClientStreamResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_285dce36ca2d93c1, []int{6}
+}
+
+func (m *GreetClientStreamResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GreetClientStreamResponse.Unmarshal(m, b)
+}
+func (m *GreetClientStreamResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GreetClientStreamResponse.Marshal(b, m, deterministic)
+}
+func (m *GreetClientStreamResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GreetClientStreamResponse.Merge(m, src)
+}
+func (m *GreetClientStreamResponse) XXX_Size() int {
+	return xxx_messageInfo_GreetClientStreamResponse.Size(m)
+}
+func (m *GreetClientStreamResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GreetClientStreamResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GreetClientStreamResponse proto.InternalMessageInfo
+
+func (m *GreetClientStreamResponse) GetGreeting() []string {
+	if m != nil {
+		return m.Greeting
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Person)(nil), "greet.Person")
 	proto.RegisterType((*GreetRequest)(nil), "greet.GreetRequest")
 	proto.RegisterType((*GreetResponse)(nil), "greet.GreetResponse")
-	proto.RegisterType((*GreetStreamRequest)(nil), "greet.GreetStreamRequest")
-	proto.RegisterType((*GreetStreamResponse)(nil), "greet.GreetStreamResponse")
+	proto.RegisterType((*GreetServerStreamRequest)(nil), "greet.GreetServerStreamRequest")
+	proto.RegisterType((*GreetServerStreamResponse)(nil), "greet.GreetServerStreamResponse")
+	proto.RegisterType((*GreetClientStreamRequest)(nil), "greet.GreetClientStreamRequest")
+	proto.RegisterType((*GreetClientStreamResponse)(nil), "greet.GreetClientStreamResponse")
 }
 
 func init() {
@@ -240,23 +328,26 @@ func init() {
 }
 
 var fileDescriptor_285dce36ca2d93c1 = []byte{
-	// 243 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4c, 0x2f, 0x4a, 0x4d,
-	0x2d, 0xd1, 0x07, 0x93, 0x7a, 0x05, 0x45, 0xf9, 0x25, 0xf9, 0x42, 0xac, 0x60, 0x8e, 0x92, 0x0b,
-	0x17, 0x5b, 0x40, 0x6a, 0x51, 0x71, 0x7e, 0x9e, 0x90, 0x2c, 0x17, 0x57, 0x5a, 0x66, 0x51, 0x71,
-	0x49, 0x7c, 0x5e, 0x62, 0x6e, 0xaa, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x67, 0x10, 0x27, 0x58, 0xc4,
-	0x2f, 0x31, 0x37, 0x55, 0x48, 0x9a, 0x8b, 0x33, 0x27, 0x11, 0x26, 0xcb, 0x04, 0x96, 0xe5, 0x00,
-	0x09, 0x80, 0x24, 0x95, 0x4c, 0xb9, 0x78, 0xdc, 0x41, 0xc6, 0x05, 0xa5, 0x16, 0x96, 0xa6, 0x16,
-	0x97, 0x08, 0xa9, 0xc2, 0x4c, 0x05, 0x9b, 0xc3, 0x6d, 0xc4, 0xab, 0x07, 0xb1, 0x1a, 0x22, 0x18,
-	0x04, 0x95, 0x54, 0xd2, 0xe6, 0xe2, 0x85, 0x6a, 0x2b, 0x2e, 0xc8, 0xcf, 0x2b, 0x4e, 0x15, 0x92,
-	0xe2, 0xe2, 0x00, 0x2b, 0xcc, 0xcc, 0x4b, 0x87, 0xba, 0x00, 0xce, 0x57, 0xb2, 0xe6, 0x12, 0x02,
-	0x2b, 0x0e, 0x2e, 0x29, 0x4a, 0x4d, 0xcc, 0x25, 0xd1, 0x26, 0x43, 0x2e, 0x61, 0x14, 0xcd, 0x84,
-	0xed, 0x33, 0xea, 0x63, 0x84, 0x7a, 0x2a, 0x38, 0xb5, 0xa8, 0x2c, 0x33, 0x39, 0x55, 0xc8, 0x84,
-	0x8b, 0x15, 0xcc, 0x17, 0x12, 0x86, 0xda, 0x81, 0xec, 0x65, 0x29, 0x11, 0x54, 0x41, 0x88, 0x05,
-	0x4a, 0x0c, 0x42, 0x1e, 0x5c, 0xdc, 0x48, 0x36, 0x0b, 0x49, 0x22, 0x2b, 0x43, 0xf1, 0x8a, 0x94,
-	0x14, 0x36, 0x29, 0x98, 0x39, 0x06, 0x8c, 0x4e, 0xdc, 0x51, 0x9c, 0x90, 0x68, 0x2c, 0xc8, 0x4e,
-	0x4f, 0x62, 0x03, 0xc7, 0xa2, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xf0, 0xc5, 0x3b, 0x85, 0xda,
-	0x01, 0x00, 0x00,
+	// 299 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0xcb, 0x4b, 0xc3, 0x40,
+	0x10, 0xc6, 0x59, 0x25, 0xa1, 0x99, 0xda, 0x43, 0x57, 0x91, 0x1a, 0x11, 0xcb, 0x82, 0x50, 0x10,
+	0xaa, 0x44, 0xc4, 0xb3, 0x0f, 0xf0, 0x26, 0x92, 0x5e, 0xd4, 0x8b, 0xa4, 0x32, 0x86, 0x60, 0xb3,
+	0x89, 0xbb, 0x1b, 0xff, 0x74, 0xcf, 0x92, 0xc9, 0x1a, 0x12, 0x5c, 0x41, 0x7b, 0x09, 0xcc, 0x23,
+	0xbf, 0xef, 0x9b, 0xd9, 0x81, 0x71, 0xaa, 0x10, 0xcd, 0x09, 0x7d, 0xe7, 0xa5, 0x2a, 0x4c, 0xc1,
+	0x3d, 0x0a, 0xc4, 0x0d, 0xf8, 0xf7, 0xa8, 0x74, 0x21, 0xf9, 0x01, 0xc0, 0x6b, 0xa6, 0xb4, 0x79,
+	0x96, 0x49, 0x8e, 0x13, 0x36, 0x65, 0xb3, 0x20, 0x0e, 0x28, 0x73, 0x97, 0xe4, 0xc8, 0xf7, 0x21,
+	0x58, 0x25, 0xdf, 0xd5, 0x0d, 0xaa, 0x0e, 0xea, 0x44, 0x5d, 0x14, 0xe7, 0xb0, 0x75, 0x5b, 0xe3,
+	0x62, 0x7c, 0xaf, 0x50, 0x1b, 0x7e, 0x04, 0x7e, 0x49, 0x54, 0xe2, 0x0c, 0xa3, 0xd1, 0xbc, 0x91,
+	0x6e, 0xa4, 0x62, 0x5b, 0x14, 0xc7, 0x30, 0xb2, 0xbf, 0xe9, 0xb2, 0x90, 0x1a, 0x79, 0x08, 0x03,
+	0x6a, 0xcc, 0x64, 0x6a, 0x1d, 0xb4, 0xb1, 0x78, 0x84, 0x09, 0x35, 0x2f, 0x50, 0x7d, 0xa0, 0x5a,
+	0x18, 0x85, 0x49, 0xfe, 0x3f, 0x3d, 0xbe, 0x0b, 0xbe, 0xac, 0xf2, 0x25, 0x2a, 0x1a, 0xc0, 0x8b,
+	0x6d, 0x24, 0x2e, 0x60, 0xcf, 0x81, 0xfe, 0x83, 0xa7, 0x4b, 0xeb, 0xe9, 0x7a, 0x95, 0xa1, 0x34,
+	0xeb, 0x78, 0x6a, 0xb5, 0xfb, 0x08, 0xa7, 0xf6, 0x66, 0x57, 0x3b, 0xfa, 0x64, 0x76, 0xe9, 0xb5,
+	0xeb, 0xec, 0x05, 0x79, 0x04, 0x1e, 0xc5, 0x7c, 0xdb, 0x2a, 0x75, 0x9f, 0x24, 0xdc, 0xe9, 0x27,
+	0xad, 0xc0, 0x03, 0x8c, 0x7f, 0x4c, 0xce, 0x0f, 0xbb, 0xad, 0x8e, 0x75, 0x87, 0xd3, 0xdf, 0x1b,
+	0x1a, 0xee, 0x29, 0x6b, 0xc9, 0xdd, 0xb9, 0xfa, 0x64, 0xc7, 0xd2, 0xfa, 0x64, 0xd7, 0x4a, 0x66,
+	0xec, 0x6a, 0xf8, 0x14, 0x34, 0xe7, 0x5c, 0xbe, 0xa5, 0x4b, 0x9f, 0xae, 0xf9, 0xec, 0x2b, 0x00,
+	0x00, 0xff, 0xff, 0x61, 0xb0, 0x5c, 0x59, 0xe2, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -272,7 +363,8 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type GreetServiceClient interface {
 	Greet(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (*GreetResponse, error)
-	GreetStream(ctx context.Context, in *GreetStreamRequest, opts ...grpc.CallOption) (GreetService_GreetStreamClient, error)
+	GreetServerStream(ctx context.Context, in *GreetServerStreamRequest, opts ...grpc.CallOption) (GreetService_GreetServerStreamClient, error)
+	GreetClientStream(ctx context.Context, opts ...grpc.CallOption) (GreetService_GreetClientStreamClient, error)
 }
 
 type greetServiceClient struct {
@@ -292,12 +384,12 @@ func (c *greetServiceClient) Greet(ctx context.Context, in *GreetRequest, opts .
 	return out, nil
 }
 
-func (c *greetServiceClient) GreetStream(ctx context.Context, in *GreetStreamRequest, opts ...grpc.CallOption) (GreetService_GreetStreamClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[0], "/greet.GreetService/GreetStream", opts...)
+func (c *greetServiceClient) GreetServerStream(ctx context.Context, in *GreetServerStreamRequest, opts ...grpc.CallOption) (GreetService_GreetServerStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[0], "/greet.GreetService/GreetServerStream", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &greetServiceGreetStreamClient{stream}
+	x := &greetServiceGreetServerStreamClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -307,17 +399,51 @@ func (c *greetServiceClient) GreetStream(ctx context.Context, in *GreetStreamReq
 	return x, nil
 }
 
-type GreetService_GreetStreamClient interface {
-	Recv() (*GreetStreamResponse, error)
+type GreetService_GreetServerStreamClient interface {
+	Recv() (*GreetServerStreamResponse, error)
 	grpc.ClientStream
 }
 
-type greetServiceGreetStreamClient struct {
+type greetServiceGreetServerStreamClient struct {
 	grpc.ClientStream
 }
 
-func (x *greetServiceGreetStreamClient) Recv() (*GreetStreamResponse, error) {
-	m := new(GreetStreamResponse)
+func (x *greetServiceGreetServerStreamClient) Recv() (*GreetServerStreamResponse, error) {
+	m := new(GreetServerStreamResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *greetServiceClient) GreetClientStream(ctx context.Context, opts ...grpc.CallOption) (GreetService_GreetClientStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[1], "/greet.GreetService/GreetClientStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &greetServiceGreetClientStreamClient{stream}
+	return x, nil
+}
+
+type GreetService_GreetClientStreamClient interface {
+	Send(*GreetClientStreamRequest) error
+	CloseAndRecv() (*GreetClientStreamResponse, error)
+	grpc.ClientStream
+}
+
+type greetServiceGreetClientStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *greetServiceGreetClientStreamClient) Send(m *GreetClientStreamRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *greetServiceGreetClientStreamClient) CloseAndRecv() (*GreetClientStreamResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(GreetClientStreamResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -327,7 +453,8 @@ func (x *greetServiceGreetStreamClient) Recv() (*GreetStreamResponse, error) {
 // GreetServiceServer is the server API for GreetService service.
 type GreetServiceServer interface {
 	Greet(context.Context, *GreetRequest) (*GreetResponse, error)
-	GreetStream(*GreetStreamRequest, GreetService_GreetStreamServer) error
+	GreetServerStream(*GreetServerStreamRequest, GreetService_GreetServerStreamServer) error
+	GreetClientStream(GreetService_GreetClientStreamServer) error
 }
 
 // UnimplementedGreetServiceServer can be embedded to have forward compatible implementations.
@@ -337,8 +464,11 @@ type UnimplementedGreetServiceServer struct {
 func (*UnimplementedGreetServiceServer) Greet(ctx context.Context, req *GreetRequest) (*GreetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Greet not implemented")
 }
-func (*UnimplementedGreetServiceServer) GreetStream(req *GreetStreamRequest, srv GreetService_GreetStreamServer) error {
-	return status.Errorf(codes.Unimplemented, "method GreetStream not implemented")
+func (*UnimplementedGreetServiceServer) GreetServerStream(req *GreetServerStreamRequest, srv GreetService_GreetServerStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GreetServerStream not implemented")
+}
+func (*UnimplementedGreetServiceServer) GreetClientStream(srv GreetService_GreetClientStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GreetClientStream not implemented")
 }
 
 func RegisterGreetServiceServer(s *grpc.Server, srv GreetServiceServer) {
@@ -363,25 +493,51 @@ func _GreetService_Greet_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GreetService_GreetStream_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GreetStreamRequest)
+func _GreetService_GreetServerStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GreetServerStreamRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(GreetServiceServer).GreetStream(m, &greetServiceGreetStreamServer{stream})
+	return srv.(GreetServiceServer).GreetServerStream(m, &greetServiceGreetServerStreamServer{stream})
 }
 
-type GreetService_GreetStreamServer interface {
-	Send(*GreetStreamResponse) error
+type GreetService_GreetServerStreamServer interface {
+	Send(*GreetServerStreamResponse) error
 	grpc.ServerStream
 }
 
-type greetServiceGreetStreamServer struct {
+type greetServiceGreetServerStreamServer struct {
 	grpc.ServerStream
 }
 
-func (x *greetServiceGreetStreamServer) Send(m *GreetStreamResponse) error {
+func (x *greetServiceGreetServerStreamServer) Send(m *GreetServerStreamResponse) error {
 	return x.ServerStream.SendMsg(m)
+}
+
+func _GreetService_GreetClientStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GreetServiceServer).GreetClientStream(&greetServiceGreetClientStreamServer{stream})
+}
+
+type GreetService_GreetClientStreamServer interface {
+	SendAndClose(*GreetClientStreamResponse) error
+	Recv() (*GreetClientStreamRequest, error)
+	grpc.ServerStream
+}
+
+type greetServiceGreetClientStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *greetServiceGreetClientStreamServer) SendAndClose(m *GreetClientStreamResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *greetServiceGreetClientStreamServer) Recv() (*GreetClientStreamRequest, error) {
+	m := new(GreetClientStreamRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 var _GreetService_serviceDesc = grpc.ServiceDesc{
@@ -395,9 +551,14 @@ var _GreetService_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GreetStream",
-			Handler:       _GreetService_GreetStream_Handler,
+			StreamName:    "GreetServerStream",
+			Handler:       _GreetService_GreetServerStream_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "GreetClientStream",
+			Handler:       _GreetService_GreetClientStream_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "greet/greet.proto",
