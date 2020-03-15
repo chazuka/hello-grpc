@@ -4,12 +4,11 @@ import (
 	"context"
 	"log"
 
-	"github.com/chazuka/hello-grpc/greet"
-
+	"github.com/chazuka/hello-grpc/greet/pkg"
 	"google.golang.org/grpc"
 )
 
-func once(sdk *GreetingSDK, person greet.Person) {
+func once(sdk *GreetingSDK, person pkg.Person) {
 	result, err := sdk.Greet(context.TODO(), person)
 	if err != nil {
 		log.Printf("error while calling greet %v", err)
@@ -17,8 +16,8 @@ func once(sdk *GreetingSDK, person greet.Person) {
 	log.Printf("greeting from server: %s", result.GetGreeting())
 }
 
-func multiple(sdk *GreetingSDK, person greet.Person) {
-	cb := func(rw *greet.GreetStreamResponse, err error) {
+func multiple(sdk *GreetingSDK, person pkg.Person) {
+	cb := func(rw *pkg.GreetStreamResponse, err error) {
 		if err != nil {
 			log.Printf("error: %+v", err)
 			return
@@ -41,7 +40,7 @@ func main() {
 
 	sdk := NewGreetingSDK(connection)
 
-	person := greet.Person{
+	person := pkg.Person{
 		FirstName: "Komang",
 		LastName:  "Arthayasa",
 	}

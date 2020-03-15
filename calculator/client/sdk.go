@@ -6,26 +6,26 @@ import (
 	"io"
 	"sync"
 
-	"github.com/chazuka/hello-grpc/calculator"
+	"github.com/chazuka/hello-grpc/calculator/pkg"
 	"google.golang.org/grpc"
 )
 
 type CalculatorSDK struct {
-	connection calculator.CalculatorServiceClient
+	connection pkg.CalculatorServiceClient
 }
 
 func NewCalculator(l grpc.ClientConnInterface) *CalculatorSDK {
-	c := calculator.NewCalculatorServiceClient(l)
+	c := pkg.NewCalculatorServiceClient(l)
 	return &CalculatorSDK{connection: c}
 }
 
 func (c *CalculatorSDK) Add(ctx context.Context, a, b int32) (int32, error) {
-	r, err := c.connection.Addition(ctx, &calculator.AdditionRequest{First: a, Second: b})
+	r, err := c.connection.Addition(ctx, &pkg.AdditionRequest{First: a, Second: b})
 	return r.GetResult(), err
 }
 
 func (c *CalculatorSDK) PrimeNumberDecomposition(ctx context.Context, n int32, cb func(int32, error)) error {
-	ss, err := c.connection.PrimeNumberDecomposition(ctx, &calculator.PrimeNumberDecompositionRequest{Number: n})
+	ss, err := c.connection.PrimeNumberDecomposition(ctx, &pkg.PrimeNumberDecompositionRequest{Number: n})
 	if err != nil {
 		return err
 	}

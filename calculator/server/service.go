@@ -3,32 +3,29 @@ package main
 import (
 	"context"
 
-	calc "github.com/chazuka/hello-grpc/calculator"
+	"github.com/chazuka/hello-grpc/calculator/pkg"
 )
 
-//CalService structured functionalities of calculator service
 type CalService struct{}
 
-//Addition add 2 numbers
-func (s *CalService) Addition(ctx context.Context, r *calc.AdditionRequest) (*calc.AdditionResponse, error) {
+func (s *CalService) Addition(ctx context.Context, r *pkg.AdditionRequest) (*pkg.AdditionResponse, error) {
 	res := r.GetFirst() + r.GetSecond()
-	return &calc.AdditionResponse{Result: res}, nil
+	return &pkg.AdditionResponse{Result: res}, nil
 }
 
-func (s *CalService) PrimeNumberDecomposition(r *calc.PrimeNumberDecompositionRequest, ss calc.CalculatorService_PrimeNumberDecompositionServer) error {
+func (s *CalService) PrimeNumberDecomposition(r *pkg.PrimeNumberDecompositionRequest, ss pkg.CalculatorService_PrimeNumberDecompositionServer) error {
 	base := int32(2)
 	number := r.GetNumber()
 	for {
-		if number < 1 {
+		if number < base {
 			break
 		}
 		if number%base == 0 {
-			ss.Send(&calc.PrimeNumberDecompositionResponse{Factor: base})
+			_ = ss.Send(&pkg.PrimeNumberDecompositionResponse{Factor: base})
 			number = number / base
 			continue
 		}
 		base = base + 1
-
 	}
 	return nil
 }

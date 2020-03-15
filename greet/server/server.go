@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/chazuka/hello-grpc/greet"
+	"github.com/chazuka/hello-grpc/greet/pkg"
 	"google.golang.org/grpc"
 )
 
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	server := grpc.NewServer()
-	greet.RegisterGreetServiceServer(server, &GreetService{})
+	pkg.RegisterGreetServiceServer(server, &GreetService{})
 	log.Println("running server ...")
 	if err := server.Serve(connection); err != nil {
 		log.Fatal(err)
