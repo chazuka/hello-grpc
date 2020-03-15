@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
@@ -10,27 +9,20 @@ import (
 	calc "github.com/chazuka/hello-grpc/calculator"
 )
 
-//CalculatorServer structured functionalities of calculator service
-type CalculatorServer struct{}
-
-//Addition add 2 numbers
-func (s *CalculatorServer) Addition(ctx context.Context, r *calc.AdditionRequest) (*calc.AdditionResponse, error) {
-	res := r.GetFirst() + r.GetSecond()
-	return &calc.AdditionResponse{Result: res}, nil
-}
+const (
+	address = "0.0.0.0:50051"
+)
 
 func main() {
-	// listen to TCP connection
-	log.Println("connecting to TCP ...")
-	connection, err := net.Listen("tcp", "0.0.0.0:50051")
+	log.Println("connecting ...")
+	connection, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// build & configure grpc server
+	defer connection.Close()
+
 	s := grpc.NewServer()
-	// attach handler
-	calc.RegisterCalculatorServiceServer(s, &CalculatorServer{})
-	// serve grpc service
+	calc.RegisterCalculatorServiceServer(s, &CalService{})
 	log.Println("serving grpc service ...")
 	if err := s.Serve(connection); err != nil {
 		log.Fatal(err)

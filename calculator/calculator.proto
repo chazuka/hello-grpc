@@ -11,6 +11,16 @@ message AdditionResponse {
     int32 result = 1;
 }
 
+message PrimeNumberDecompositionRequest {
+    int32 number = 1;
+}
+
+message PrimeNumberDecompositionResponse {
+    int32 factor = 1;
+}
+
+
 service CalculatorService {
     rpc Addition (AdditionRequest) returns (AdditionResponse);
+    rpc PrimeNumberDecomposition(PrimeNumberDecompositionRequest) returns (stream PrimeNumberDecompositionResponse);
 }

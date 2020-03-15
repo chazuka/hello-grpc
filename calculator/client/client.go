@@ -5,37 +5,43 @@ import (
 	"log"
 
 	"google.golang.org/grpc"
+)
 
-	"github.com/chazuka/hello-grpc/calculator"
+const (
+	address = "0.0.0.0:50051"
 )
 
 func main() {
-	// build grpc connection client
-	connection, err := grpc.Dial("0.0.0.0:50051", grpc.WithInsecure())
+	connection, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer connection.Close()
 
-	calc := NewCalculator(connection)
-	res, _ := calc.Add(context.TODO(), 3, 10)
-	log.Printf("result of %d + %d = %d", 3, 10, res)
+	sdk := NewCalculator(connection)
+	handleAddition(sdk, 3, 10)
+	handlePrimeNumberDecomposition(sdk, 120)
 
 }
 
-type CalculatorSDK struct {
-	connection calculator.CalculatorServiceClient
+func handleAddition(sdk *CalculatorSDK, a, b int32) {
+	res, _ := sdk.Add(context.TODO(), a, b)
+	log.Printf("result of %d + %d = %d", a, b, res)
 }
 
-func NewCalculator(l grpc.ClientConnInterface) *CalculatorSDK {
-	c := calculator.NewCalculatorServiceClient(l)
-	return &CalculatorSDK{connection: c}
-}
-
-func (c *CalculatorSDK) Add(ctx context.Context, a, b int32) (int32, error) {
-	r, err := c.connection.Addition(ctx, &calculator.AdditionRequest{First: a, Second: b})
-	if err != nil {
-		return 0, err
+func handlePrimeNumberDecomposition(sdk *CalculatorSDK, n int32) {
+	factors := make([]int32, 0)
+	cb := func(f int32, err error) {
+		if err != nil {
+			log.Printf("error: %+v", err)
+			return
+		}
+		factors = append(factors, f)
+		log.Printf("response from server - %d is a factor", f)
 	}
-	return r.Result, nil
+	if err := sdk.PrimeNumberDecomposition(context.TODO(), 120, cb); err != nil {
+		log.Printf("error: %+v", err)
+		return
+	}
+	log.Printf("factors of %d are: %v", n, factors)
 }

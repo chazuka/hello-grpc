@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
 	"net"
 
@@ -10,30 +8,21 @@ import (
 	"google.golang.org/grpc"
 )
 
-type greetService struct{}
-
-func (s *greetService) Greet(ctx context.Context, r *greet.GreetRequest) (*greet.GreetResponse, error) {
-	fn := r.GetGreeting().GetFirstName()
-	ln := r.GetGreeting().GetLastName()
-	log.Printf("serving greeting request with payload %s and %s", fn, ln)
-	rw := &greet.GreetResponse{
-		Greeting: fmt.Sprintf("Hello %s %s", fn, ln),
-	}
-
-	return rw, nil
-}
+const (
+	address = "0.0.0.0:50051"
+)
 
 func main() {
-	log.Println("listening to TCP connection")
-	listener, err := net.Listen("tcp", "0.0.0.0:50051")
+	log.Println("opening TCP connection ...")
+	connection, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	greetServer := grpc.NewServer()
-	greet.RegisterGreetServiceServer(greetServer, &greetService{})
-	log.Println("serving request")
-	if err := greetServer.Serve(listener); err != nil {
+	server := grpc.NewServer()
+	greet.RegisterGreetServiceServer(server, &GreetService{})
+	log.Println("running server ...")
+	if err := server.Serve(connection); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -5,16 +5,26 @@ package greet;
 option go_package = "greet";
 
 
-message Greeting {
+message Person {
     string first_name = 1;
     string last_name = 2;
 }
 message GreetRequest {
-    Greeting greeting = 1;
+    Person Person = 1;
 }
 message GreetResponse {
     string greeting = 1;
 }
+
+message GreetStreamRequest {
+    Person Person = 1;
+}
+message GreetStreamResponse {
+    string greeting = 1;
+}
+
+
 service GreetService {
     rpc Greet(GreetRequest) returns (GreetResponse) {};
+    rpc GreetStream(GreetStreamRequest) returns (stream GreetStreamResponse) {};
 }
