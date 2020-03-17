@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"sort"
 
 	"github.com/chazuka/hello-grpc/calculator/pkg"
 )
@@ -61,7 +60,7 @@ func (s *CalService) Average(ss pkg.CalculatorService_AverageServer) error {
 }
 
 func (s *CalService) FindMaximum(ss pkg.CalculatorService_FindMaximumServer) error {
-	var numbers = make([]int, 0)
+	maximum := int32(0)
 	for {
 		r, err := ss.Recv()
 		if errors.Is(err, io.EOF) {
@@ -71,10 +70,11 @@ func (s *CalService) FindMaximum(ss pkg.CalculatorService_FindMaximumServer) err
 			log.Println("error while receiving message from client")
 			continue
 		}
-		numbers = append(numbers, int(r.GetNumber()))
-		sort.Ints(numbers)
-		if err := ss.Send(&pkg.FindMaximumResponse{Number: int32(numbers[len(numbers)-1])}); err != nil {
-			log.Println("error while sending message to client")
+		if r.GetNumber() > maximum {
+			maximum = r.GetNumber()
+			if err := ss.Send(&pkg.FindMaximumResponse{Number: maximum}); err != nil {
+				log.Println("error while sending message to client")
+			}
 		}
 	}
 }
