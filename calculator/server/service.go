@@ -2,6 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
+	"io"
+	"log"
+	"sort"
 
 	"github.com/chazuka/hello-grpc/calculator/pkg"
 )
@@ -28,4 +32,49 @@ func (s *CalService) PrimeNumberDecomposition(r *pkg.PrimeNumberDecompositionReq
 		base = base + 1
 	}
 	return nil
+}
+
+func (s *CalService) Average(ss pkg.CalculatorService_AverageServer) error {
+	numbers := make([]int32, 0)
+	for {
+		r, err := ss.Recv()
+		if errors.Is(err, io.EOF) {
+			avg := func(n []int32) float64 {
+				sum := int32(0)
+				for _, i := range n {
+					sum += i
+				}
+				return float64(sum) / float64(len(n))
+			}(numbers)
+
+			if err := ss.SendAndClose(&pkg.AverageResponse{Average: avg}); err != nil {
+				return err
+			}
+			return nil
+		}
+		if err != nil {
+			log.Printf("error receiving message from client")
+			continue
+		}
+		numbers = append(numbers, r.GetNumber())
+	}
+}
+
+func (s *CalService) FindMaximum(ss pkg.CalculatorService_FindMaximumServer) error {
+	var numbers = make([]int, 0)
+	for {
+		r, err := ss.Recv()
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+		if err != nil {
+			log.Println("error while receiving message from client")
+			continue
+		}
+		numbers = append(numbers, int(r.GetNumber()))
+		sort.Ints(numbers)
+		if err := ss.Send(&pkg.FindMaximumResponse{Number: int32(numbers[len(numbers)-1])}); err != nil {
+			log.Println("error while sending message to client")
+		}
+	}
 }

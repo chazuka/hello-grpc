@@ -61,3 +61,20 @@ func (s *GreetService) GreetClientStream(ss pkg.GreetService_GreetClientStreamSe
 		greetings = append(greetings, fmt.Sprintf("Hello %s %s", r.GetPerson().GetFirstName(), r.GetPerson().GetLastName()))
 	}
 }
+
+func (s *GreetService) GreetClientServerStream(ss pkg.GreetService_GreetClientServerStreamServer) error {
+	log.Printf("serving GreetClientServerStream ...")
+	for {
+		r, err := ss.Recv()
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		p := r.GetPerson()
+		if err = ss.Send(&pkg.GreetClientServerStreamResponse{Greeting: fmt.Sprintf("Hello %s %s", p.GetFirstName(), p.GetLastName())}); err != nil {
+			log.Printf("error while sending message")
+		}
+	}
+}

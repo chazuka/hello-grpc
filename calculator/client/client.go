@@ -21,6 +21,8 @@ func main() {
 	sdk := NewCalculator(connection)
 	handleAddition(sdk, 3, 10)
 	handlePrimeNumberDecomposition(sdk, 120)
+	handleAverage(sdk, []int32{1, 2, 3, 4, 5, 6, 7})
+	handleFindMaximum(sdk, []int32{2, 1, 3, 6, 6, 5, 8})
 
 }
 
@@ -44,4 +46,40 @@ func handlePrimeNumberDecomposition(sdk *CalculatorSDK, n int32) {
 		return
 	}
 	log.Printf("factors of %d are: %v", n, factors)
+}
+
+func handleAverage(sdk *CalculatorSDK, numbers []int32) {
+	cb := func(i int32, err error) {
+		if err != nil {
+			log.Printf("sending: %d - error: %+v", i, err)
+			return
+		}
+		log.Printf("sending: %d - OK", i)
+	}
+
+	rw, err := sdk.Average(context.TODO(), numbers, cb)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("average of %+v is %.2f", numbers, rw)
+}
+
+func handleFindMaximum(sdk *CalculatorSDK, numbers []int32) {
+	cbs := func(n int32, err error) {
+		if err != nil {
+			log.Printf("error sending: %+v", err)
+			return
+		}
+		log.Printf("sent number: %d", n)
+	}
+	cbr := func(n int32, err error) {
+		if err != nil {
+			log.Printf("error receiving: %+v", err)
+			return
+		}
+		log.Printf("receive number: %d", n)
+	}
+	if err := sdk.FindMaximum(context.Background(), numbers, cbr, cbs); err != nil {
+		log.Println(err)
+	}
 }

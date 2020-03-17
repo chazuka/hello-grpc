@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"sync"
+	"time"
 
 	"github.com/chazuka/hello-grpc/greet/pkg"
 	"google.golang.org/grpc"
@@ -58,4 +59,38 @@ func (sdk *GreetingSDK) GreetClientStream(ctx context.Context, persons []pkg.Per
 		}
 	}
 	return ss.CloseAndRecv()
+}
+
+func (sdk *GreetingSDK) GreetClientServerStream(ctx context.Context, persons []pkg.Person, cbr func(string, error), cbs func(pkg.Person, error)) error {
+	ss, err := sdk.connection.GreetClientServerStream(ctx)
+	if err != nil {
+		return err
+	}
+
+	wc := make(chan struct{})
+	go func() {
+		for i, p := range persons {
+			log.Printf("sending message to server: %d. %s %s", i, p.GetFirstName(), p.GetLastName())
+			if err := ss.Send(&pkg.GreetClientServerStreamRequest{Person: &p}); err != nil {
+				cbs(p, err)
+			}
+			time.Sleep(1 * time.Second)
+		}
+		if err := ss.CloseSend(); err != nil {
+			cbs(pkg.Person{}, err)
+		}
+	}()
+
+	go func() {
+		for {
+			rs, err := ss.Recv()
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			cbr(rs.GetGreeting(), err)
+		}
+		close(wc)
+	}()
+	<-wc
+	return nil
 }

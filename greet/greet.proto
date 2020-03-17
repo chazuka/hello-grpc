@@ -32,9 +32,18 @@ message GreetClientStreamResponse {
     repeated string greeting = 1;   
 }
 
+message GreetClientServerStreamRequest {
+    Person person = 1;
+}
+
+message GreetClientServerStreamResponse {
+    string greeting = 1;
+}
+
 
 service GreetService {
     rpc Greet(GreetRequest) returns (GreetResponse);
     rpc GreetServerStream(GreetServerStreamRequest) returns (stream GreetServerStreamResponse);
     rpc GreetClientStream(stream GreetClientStreamRequest) returns (GreetClientStreamResponse);
+    rpc GreetClientServerStream(stream GreetClientServerStreamRequest) returns (stream GreetClientServerStreamResponse);
 }
