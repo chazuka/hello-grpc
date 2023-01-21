@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	address = "0.0.0.0:50051"
+	address = ":50051"
 )
 
 func main() {
@@ -18,7 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer connection.Close()
+	defer func() {
+		_ = connection.Close()
+	}()
 
 	s := grpc.NewServer()
 	pkg.RegisterCalculatorServiceServer(s, &CalService{})

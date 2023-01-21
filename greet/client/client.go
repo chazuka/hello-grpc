@@ -2,13 +2,16 @@ package main
 
 import (
 	"context"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 
 	"github.com/chazuka/hello-grpc/greet/pkg"
 	"google.golang.org/grpc"
 )
 
-func unary(sdk *GreetingSDK, person pkg.Person) {
+const address = ":50051"
+
+func unary(sdk *GreetingSDK, person *pkg.Person) {
 	log.Println("requesting unary process")
 	result, err := sdk.Greet(context.TODO(), person)
 	if err != nil {
@@ -17,7 +20,7 @@ func unary(sdk *GreetingSDK, person pkg.Person) {
 	log.Printf("greeting from server: %s", result.GetGreeting())
 }
 
-func serverStream(sdk *GreetingSDK, person pkg.Person, num int) {
+func serverStream(sdk *GreetingSDK, person *pkg.Person, num int) {
 	log.Println("requesting server stream process")
 	cb := func(rw *pkg.GreetServerStreamResponse, err error) {
 		if err != nil {
@@ -32,7 +35,7 @@ func serverStream(sdk *GreetingSDK, person pkg.Person, num int) {
 	}
 }
 
-func clientStream(sdk *GreetingSDK, persons []pkg.Person) {
+func clientStream(sdk *GreetingSDK, persons []*pkg.Person) {
 	log.Println("requesting client stream process")
 	rw, err := sdk.GreetClientStream(context.TODO(), persons)
 	if err != nil {
@@ -46,7 +49,7 @@ func clientStream(sdk *GreetingSDK, persons []pkg.Person) {
 	}
 }
 
-func bidirectionalStream(sdk *GreetingSDK, persons []pkg.Person) {
+func bidirectionalStream(sdk *GreetingSDK, persons []*pkg.Person) {
 	log.Println("requesting bidirectional stream process")
 	cbr := func(r string, err error) {
 		if err != nil {
@@ -55,7 +58,7 @@ func bidirectionalStream(sdk *GreetingSDK, persons []pkg.Person) {
 		}
 		log.Printf("received: %s", r)
 	}
-	cbs := func(p pkg.Person, err error) {
+	cbs := func(p *pkg.Person, err error) {
 		if err != nil {
 			log.Printf("error sending message to upstream: %+v", err)
 			return
@@ -69,28 +72,30 @@ func bidirectionalStream(sdk *GreetingSDK, persons []pkg.Person) {
 
 func main() {
 	log.Println("connecting ....")
-	connection, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	connection, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer connection.Close()
+	defer func() {
+		_ = connection.Close()
+	}()
 
 	sdk := NewGreetingSDK(connection)
 
-	person := pkg.Person{
+	person := &pkg.Person{
 		FirstName: "Komang",
 		LastName:  "Arthayasa",
 	}
 	unary(sdk, person)
 	serverStream(sdk, person, 5)
-	clientStream(sdk, []pkg.Person{
+	clientStream(sdk, []*pkg.Person{
 		{FirstName: "Komang", LastName: "Arthayasa"},
 		{FirstName: "Altona", LastName: "Widjaja"},
 		{FirstName: "Leo", LastName: "Rodjito"},
 		{FirstName: "Cokorda", LastName: "Susila"},
 		{FirstName: "Steven", LastName: "Pangemanan"},
 	})
-	bidirectionalStream(sdk, []pkg.Person{
+	bidirectionalStream(sdk, []*pkg.Person{
 		{FirstName: "Komang", LastName: "Arthayasa"},
 		{FirstName: "Altona", LastName: "Widjaja"},
 		{FirstName: "Leo", LastName: "Rodjito"},

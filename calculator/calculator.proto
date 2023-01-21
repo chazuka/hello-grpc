@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package calculator;
-option go_package = "calculator/pkg";
+option go_package = "github.com/chazuka/hello-grpc/calculator/pkg";
 
 message AdditionRequest {
     int32 first = 1;

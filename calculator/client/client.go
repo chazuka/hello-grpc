@@ -2,21 +2,24 @@ package main
 
 import (
 	"context"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 
 	"google.golang.org/grpc"
 )
 
 const (
-	address = "0.0.0.0:50051"
+	address = ":50051"
 )
 
 func main() {
-	connection, err := grpc.Dial(address, grpc.WithInsecure())
+	connection, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer connection.Close()
+	defer func() {
+		_ = connection.Close()
+	}()
 
 	sdk := NewCalculator(connection)
 	handleAddition(sdk, 3, 10)

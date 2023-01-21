@@ -10,7 +10,9 @@ import (
 	"github.com/chazuka/hello-grpc/greet/pkg"
 )
 
-type GreetService struct{}
+type GreetService struct {
+	pkg.GreetServiceServer
+}
 
 func (s *GreetService) Greet(ctx context.Context, r *pkg.GreetRequest) (*pkg.GreetResponse, error) {
 	log.Printf("serving Greet request ...")

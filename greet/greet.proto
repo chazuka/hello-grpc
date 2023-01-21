@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package greet;
 
-option go_package = "greet/pkg";
+option go_package = "github.com/chazuka/hello-grpc/greet/pkg";
 
 
 message Person {

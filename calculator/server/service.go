@@ -9,7 +9,9 @@ import (
 	"github.com/chazuka/hello-grpc/calculator/pkg"
 )
 
-type CalService struct{}
+type CalService struct {
+	pkg.CalculatorServiceServer
+}
 
 func (s *CalService) Addition(ctx context.Context, r *pkg.AdditionRequest) (*pkg.AdditionResponse, error) {
 	res := r.GetFirst() + r.GetSecond()
